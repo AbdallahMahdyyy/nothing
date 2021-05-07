@@ -15,7 +15,6 @@ jobs:
       - checkout
       - run: echo "testing the components"
       - run: npm install
-      - run: npm install --only=dev
       - run: npm test
 workflows:
   version: 2
