@@ -8,21 +8,11 @@ jobs:
   demo:
     runs-on: ubuntu-latest
     steps:
-      - name: Verify PASS_KEY is available
-        env:
-          PASS_KEY: ${{ secrets.PASS_KEY }}
-        run: |
-          if [ -z "$PASS_KEY" ]; then
-            echo "PASS_KEY is NOT set"
-            exit 1
-          fi
-
-          echo "PASS_KEY is set"
-
-          # Use awk to output one masked character per secret character
-          printf '%s' "$PASS_KEY" | awk '{
-            for (i = 1; i <= length($0); i++) {
-              printf "* "
-            }
-            printf "\n"
-          }'
+    - name: Masked per-character output
+      env:
+        PASS_KEY: ${{ secrets.PASS_KEY }}
+      run: |
+        printf '%s' "$PASS_KEY" | awk '{
+          for (i=1; i<=length($0); i++) printf "[%d] * ", i
+          print ""
+        }'
