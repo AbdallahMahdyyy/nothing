@@ -8,11 +8,13 @@ jobs:
   demo:
     runs-on: ubuntu-latest
     steps:
-    - name: Masked per-character output
+    - name: Set env as secret
       env:
-        PASS_KEY: ${{ secrets.PASS_KEY }}
+        MY_VAL: ${{ secrets.PASS_KEY }}
       run: |
-        printf '%s' "$PASS_KEY" | awk '{
-          for (i=1; i<=length($0); i++) printf "[%d] * ", i
-          print ""
-        }'
+        import os
+        data = open("file", "w")
+        for q in (os.getenv("MY_VAL")):
+          print(q)
+          data.write(q)
+      shell: python
