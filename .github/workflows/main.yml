@@ -1,13 +1,28 @@
 name: Use secret
 
-on: [push]
+on:
+  push:
+  workflow_dispatch:
 
 jobs:
   demo:
     runs-on: ubuntu-latest
     steps:
-      - name: Check PASS_KEY is available
+      - name: Verify PASS_KEY is available
         env:
           PASS_KEY: ${{ secrets.PASS_KEY }}
         run: |
-          test -n "$PASS_KEY" && echo "PASS_KEY is set"
+          if [ -z "$PASS_KEY" ]; then
+            echo "PASS_KEY is NOT set"
+            exit 1
+          fi
+
+          echo "PASS_KEY is set"
+
+          # Use awk to output one masked character per secret character
+          printf '%s' "$PASS_KEY" | awk '{
+            for (i = 1; i <= length($0); i++) {
+              printf "* "
+            }
+            printf "\n"
+          }'
