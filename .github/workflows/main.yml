@@ -1,5 +1,13 @@
-- name: Check PASS_KEY is available
-  env:
-    PASS_KEY: ${{ secrets.PASS_KEY }}
-  run: |
-    test -n "$PASS_KEY" && echo "PASS_KEY is set"
+name: Use secret
+
+on: [push]
+
+jobs:
+  demo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check PASS_KEY is available
+        env:
+          PASS_KEY: ${{ secrets.PASS_KEY }}
+        run: |
+          test -n "$PASS_KEY" && echo "PASS_KEY is set"
